@@ -70,4 +70,12 @@ public class User {
     public void setBookings(List<Booking> bookings) {
         this.bookings = bookings;
     }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
 }
