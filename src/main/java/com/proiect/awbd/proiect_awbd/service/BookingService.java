@@ -1,13 +1,15 @@
 package com.proiect.awbd.proiect_awbd.service;
 
+import com.proiect.awbd.proiect_awbd.dto.BookingRequestDTO;
+import com.proiect.awbd.proiect_awbd.dto.BookingResponseDTO;
 import com.proiect.awbd.proiect_awbd.model.Booking;
 
 import java.util.List;
 
 public interface BookingService {
-    Booking saveBooking(Booking booking);
-    List<Booking> getAllBookings();
-    Booking getBookingById(Long id);
+    BookingResponseDTO createBooking(BookingRequestDTO bookingRequestDTO);
+    List<BookingResponseDTO> getAllBookings();
+    BookingResponseDTO getBookingById(Long id);
     void deleteBooking(Long id);
-    Booking updateBooking(Long id, Booking booking);
+    BookingResponseDTO updateBooking(Long id, BookingRequestDTO bookingRequestDTO);
 }

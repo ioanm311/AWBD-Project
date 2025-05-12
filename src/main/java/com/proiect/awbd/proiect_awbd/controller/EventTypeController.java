@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RestController
+/*@RestController
 @RequestMapping("/api/event-types")
 public class EventTypeController {
 
@@ -40,5 +40,5 @@ public class EventTypeController {
     public void deleteEventType(@PathVariable Long id) {
         eventTypeService.deleteEventType(id);
     }
-}
+}*/
 

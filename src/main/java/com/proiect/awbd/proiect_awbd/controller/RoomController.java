@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RestController
+/*@RestController
 @RequestMapping("/api/rooms")
 public class RoomController {
 
@@ -40,5 +40,5 @@ public class RoomController {
     public void deleteRoom(@PathVariable Long id) {
         roomService.deleteRoom(id);
     }
-}
+}*/
 
