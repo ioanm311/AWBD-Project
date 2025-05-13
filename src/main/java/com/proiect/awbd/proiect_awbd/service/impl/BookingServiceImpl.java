@@ -8,7 +8,6 @@ import com.proiect.awbd.proiect_awbd.model.Booking;
 import com.proiect.awbd.proiect_awbd.model.Equipment;
 import com.proiect.awbd.proiect_awbd.repository.*;
 import com.proiect.awbd.proiect_awbd.service.BookingService;
-import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -43,11 +42,11 @@ public class BookingServiceImpl implements BookingService {
         booking.setEndTime(request.getEndTime());
 
         booking.setUser(userRepository.findById(request.getUserId())
-                .orElseThrow(() -> new EntityNotFoundException("User not found")));
+                .orElseThrow(() -> new ResourceNotFoundException("User not found")));
         booking.setRoom(roomRepository.findById(request.getRoomId())
-                .orElseThrow(() -> new EntityNotFoundException("Room not found")));
+                .orElseThrow(() -> new ResourceNotFoundException("Room not found")));
         booking.setEventType(eventTypeRepository.findById(request.getEventTypeId())
-                .orElseThrow(() -> new EntityNotFoundException("Event type not found")));
+                .orElseThrow(() -> new ResourceNotFoundException("Event type not found")));
         booking.setEquipments(equipmentRepository.findAllById(request.getEquipmentIds()));
 
         Booking saved = bookingRepository.save(booking);
@@ -65,7 +64,7 @@ public class BookingServiceImpl implements BookingService {
     public BookingResponseDTO getBookingById(Long id) {
         return bookingRepository.findById(id)
                 .map(this::mapToDTO)
-                .orElseThrow(() -> new EntityNotFoundException("Booking not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Booking not found"));
     }
 
     @Override
@@ -76,17 +75,17 @@ public class BookingServiceImpl implements BookingService {
     @Override
     public BookingResponseDTO updateBooking(Long id, BookingRequestDTO request) {
         Booking booking = bookingRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Booking not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Booking not found"));
 
         booking.setDate(request.getDate());
         booking.setStartTime(request.getStartTime());
         booking.setEndTime(request.getEndTime());
         booking.setUser(userRepository.findById(request.getUserId())
-                .orElseThrow(() -> new EntityNotFoundException("User not found")));
+                .orElseThrow(() -> new ResourceNotFoundException("User not found")));
         booking.setRoom(roomRepository.findById(request.getRoomId())
-                .orElseThrow(() -> new EntityNotFoundException("Room not found")));
+                .orElseThrow(() -> new ResourceNotFoundException("Room not found")));
         booking.setEventType(eventTypeRepository.findById(request.getEventTypeId())
-                .orElseThrow(() -> new EntityNotFoundException("Event type not found")));
+                .orElseThrow(() -> new ResourceNotFoundException("Event type not found")));
         booking.setEquipments(equipmentRepository.findAllById(request.getEquipmentIds()));
 
         return mapToDTO(bookingRepository.save(booking));
