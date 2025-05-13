@@ -20,4 +20,3 @@ public class EventTypeDTO {
         this.name = name;
     }
 }
-

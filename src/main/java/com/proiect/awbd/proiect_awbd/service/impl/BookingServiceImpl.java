@@ -36,6 +36,14 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     public BookingResponseDTO createBooking(BookingRequestDTO request) {
+        boolean alreadyExists = bookingRepository.existsByUser_UserIdAndRoom_RoomIdAndDateAndStartTimeAndEndTime(
+                request.getUserId(), request.getRoomId(), request.getDate(),
+                request.getStartTime(), request.getEndTime());
+
+        if (alreadyExists) {
+            throw new RuntimeException("There is already a reservation for this user, room and date");
+        }
+
         Booking booking = new Booking();
         booking.setDate(request.getDate());
         booking.setStartTime(request.getStartTime());

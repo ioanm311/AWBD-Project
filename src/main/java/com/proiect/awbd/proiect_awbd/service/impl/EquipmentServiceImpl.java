@@ -45,10 +45,14 @@ public class EquipmentServiceImpl implements EquipmentService {
 
     @Override
     public void deleteEquipment(Long id) {
-        if (!equipmentRepository.existsById(id)) {
-            throw new ResourceNotFoundException("Equipment with id " + id + " not found");
+        Equipment equipment = equipmentRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Equipment with id " + id + " not found"));
+
+        if (!equipment.getBookings().isEmpty()) {
+            throw new IllegalStateException("The equipment is associated with a booking.");
         }
-        equipmentRepository.deleteById(id);
+
+        equipmentRepository.delete(equipment);
     }
 
     @Override
