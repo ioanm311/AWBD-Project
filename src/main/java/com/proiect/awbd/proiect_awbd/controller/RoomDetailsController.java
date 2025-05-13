@@ -1,12 +1,14 @@
 package com.proiect.awbd.proiect_awbd.controller;
 
+import com.proiect.awbd.proiect_awbd.dto.RoomDetailsDTO;
 import com.proiect.awbd.proiect_awbd.model.RoomDetails;
 import com.proiect.awbd.proiect_awbd.service.RoomDetailsService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-/*@RestController
+@RestController
 @RequestMapping("/api/room-details")
 public class RoomDetailsController {
 
@@ -17,28 +19,29 @@ public class RoomDetailsController {
     }
 
     @PostMapping
-    public RoomDetails createRoomDetails(@RequestBody RoomDetails roomDetails) {
-        return roomDetailsService.saveRoomDetails(roomDetails);
+    public ResponseEntity<RoomDetailsDTO> createRoomDetails(@RequestBody RoomDetailsDTO dto) {
+        return ResponseEntity.ok(roomDetailsService.saveRoomDetails(dto));
     }
 
     @GetMapping
-    public List<RoomDetails> getAllRoomDetails() {
-        return roomDetailsService.getAllRoomDetails();
+    public ResponseEntity<List<RoomDetailsDTO>> getAllRoomDetails() {
+        return ResponseEntity.ok(roomDetailsService.getAllRoomDetails());
     }
 
     @GetMapping("/{id}")
-    public RoomDetails getRoomDetailsById(@PathVariable Long id) {
-        return roomDetailsService.getRoomDetailsById(id);
+    public ResponseEntity<RoomDetailsDTO> getRoomDetailsById(@PathVariable Long id) {
+        return ResponseEntity.ok(roomDetailsService.getRoomDetailsById(id));
     }
 
     @PutMapping("/{id}")
-    public RoomDetails updateRoomDetails(@PathVariable Long id, @RequestBody RoomDetails roomDetails) {
-        return roomDetailsService.updateRoomDetails(id, roomDetails);
+    public ResponseEntity<RoomDetailsDTO> updateRoomDetails(@PathVariable Long id, @RequestBody RoomDetailsDTO dto) {
+        return ResponseEntity.ok(roomDetailsService.updateRoomDetails(id, dto));
     }
 
     @DeleteMapping("/{id}")
-    public void deleteRoomDetails(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteRoomDetails(@PathVariable Long id) {
         roomDetailsService.deleteRoomDetails(id);
+        return ResponseEntity.noContent().build();
     }
-}*/
+}
 

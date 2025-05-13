@@ -1,12 +1,13 @@
 package com.proiect.awbd.proiect_awbd.controller;
 
-import com.proiect.awbd.proiect_awbd.model.Booking;
+import com.proiect.awbd.proiect_awbd.dto.BookingRequestDTO;
+import com.proiect.awbd.proiect_awbd.dto.BookingResponseDTO;
 import com.proiect.awbd.proiect_awbd.service.BookingService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-/*@RestController
+@RestController
 @RequestMapping("/api/bookings")
 public class BookingController {
 
@@ -17,27 +18,27 @@ public class BookingController {
     }
 
     @PostMapping
-    public Booking createBooking(@RequestBody Booking booking) {
-        return bookingService.saveBooking(booking);
+    public BookingResponseDTO createBooking(@RequestBody BookingRequestDTO request) {
+        return bookingService.createBooking(request);
     }
 
     @GetMapping
-    public List<Booking> getAllBookings() {
+    public List<BookingResponseDTO> getAllBookings() {
         return bookingService.getAllBookings();
     }
 
     @GetMapping("/{id}")
-    public Booking getBookingById(@PathVariable Long id) {
+    public BookingResponseDTO getBookingById(@PathVariable Long id) {
         return bookingService.getBookingById(id);
     }
 
     @PutMapping("/{id}")
-    public Booking updateBooking(@PathVariable Long id, @RequestBody Booking booking) {
-        return bookingService.updateBooking(id, booking);
+    public BookingResponseDTO updateBooking(@PathVariable Long id, @RequestBody BookingRequestDTO request) {
+        return bookingService.updateBooking(id, request);
     }
 
     @DeleteMapping("/{id}")
     public void deleteBooking(@PathVariable Long id) {
         bookingService.deleteBooking(id);
     }
-}*/
+}

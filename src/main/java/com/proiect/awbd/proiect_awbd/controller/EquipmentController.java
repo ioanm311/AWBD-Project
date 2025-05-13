@@ -1,12 +1,12 @@
 package com.proiect.awbd.proiect_awbd.controller;
 
-import com.proiect.awbd.proiect_awbd.model.Equipment;
+import com.proiect.awbd.proiect_awbd.dto.EquipmentDTO;
 import com.proiect.awbd.proiect_awbd.service.EquipmentService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-/*@RestController
+@RestController
 @RequestMapping("/api/equipment")
 public class EquipmentController {
 
@@ -17,28 +17,28 @@ public class EquipmentController {
     }
 
     @PostMapping
-    public Equipment createEquipment(@RequestBody Equipment equipment) {
-        return equipmentService.saveEquipment(equipment);
+    public EquipmentDTO saveEquipment(@RequestBody EquipmentDTO dto) {
+        return equipmentService.saveEquipment(dto);
     }
 
     @GetMapping
-    public List<Equipment> getAllEquipments() {
+    public List<EquipmentDTO> getAllEquipments() {
         return equipmentService.getAllEquipments();
     }
 
     @GetMapping("/{id}")
-    public Equipment getEquipmentById(@PathVariable Long id) {
+    public EquipmentDTO getEquipmentById(@PathVariable Long id) {
         return equipmentService.getEquipmentById(id);
     }
 
     @PutMapping("/{id}")
-    public Equipment updateEquipment(@PathVariable Long id, @RequestBody Equipment equipment) {
-        return equipmentService.updateEquipment(id, equipment);
+    public EquipmentDTO updateEquipment(@PathVariable Long id, @RequestBody EquipmentDTO dto) {
+        return equipmentService.updateEquipment(id, dto);
     }
 
     @DeleteMapping("/{id}")
     public void deleteEquipment(@PathVariable Long id) {
         equipmentService.deleteEquipment(id);
     }
-}*/
+}
 

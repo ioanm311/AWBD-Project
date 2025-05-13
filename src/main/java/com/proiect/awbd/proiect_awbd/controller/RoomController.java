@@ -1,12 +1,13 @@
 package com.proiect.awbd.proiect_awbd.controller;
 
-import com.proiect.awbd.proiect_awbd.model.Room;
+import com.proiect.awbd.proiect_awbd.dto.RoomDTO;
 import com.proiect.awbd.proiect_awbd.service.RoomService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-/*@RestController
+@RestController
 @RequestMapping("/api/rooms")
 public class RoomController {
 
@@ -17,28 +18,29 @@ public class RoomController {
     }
 
     @PostMapping
-    public Room createRoom(@RequestBody Room room) {
-        return roomService.saveRoom(room);
+    public ResponseEntity<RoomDTO> createRoom(@RequestBody RoomDTO roomDTO) {
+        return ResponseEntity.ok(roomService.saveRoom(roomDTO));
     }
 
     @GetMapping
-    public List<Room> getAllRooms() {
-        return roomService.getAllRooms();
+    public ResponseEntity<List<RoomDTO>> getAllRooms() {
+        return ResponseEntity.ok(roomService.getAllRooms());
     }
 
     @GetMapping("/{id}")
-    public Room getRoomById(@PathVariable Long id) {
-        return roomService.getRoomById(id);
+    public ResponseEntity<RoomDTO> getRoomById(@PathVariable Long id) {
+        return ResponseEntity.ok(roomService.getRoomById(id));
     }
 
     @PutMapping("/{id}")
-    public Room updateRoom(@PathVariable Long id, @RequestBody Room room) {
-        return roomService.updateRoom(id, room);
+    public ResponseEntity<RoomDTO> updateRoom(@PathVariable Long id, @RequestBody RoomDTO roomDTO) {
+        return ResponseEntity.ok(roomService.updateRoom(id, roomDTO));
     }
 
     @DeleteMapping("/{id}")
-    public void deleteRoom(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteRoom(@PathVariable Long id) {
         roomService.deleteRoom(id);
+        return ResponseEntity.noContent().build();
     }
-}*/
+}
 

@@ -1,10 +1,12 @@
 package com.proiect.awbd.proiect_awbd.service.impl;
 
 import com.proiect.awbd.proiect_awbd.dto.UserDTO;
+import com.proiect.awbd.proiect_awbd.dto.UserRequestDTO;
 import com.proiect.awbd.proiect_awbd.exception.ResourceNotFoundException;
 import com.proiect.awbd.proiect_awbd.model.User;
 import com.proiect.awbd.proiect_awbd.repository.UserRepository;
 import com.proiect.awbd.proiect_awbd.service.UserService;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,14 +16,20 @@ import java.util.stream.Collectors;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    public UserServiceImpl(UserRepository userRepository) {
+    public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
-    public UserDTO saveUser(UserDTO userDTO) {
-        User user = mapToEntity(userDTO);
+    public UserDTO saveUser(UserRequestDTO userRequestDTO) {
+        if (userRequestDTO.getPassword() == null || userRequestDTO.getPassword().isBlank()) {
+            throw new IllegalArgumentException("Password must not be empty");
+        }
+        User user = mapToEntity(userRequestDTO);
+        user.setPassword(passwordEncoder.encode(userRequestDTO.getPassword()));
         User saved = userRepository.save(user);
         return mapToDTO(saved);
     }
@@ -49,14 +57,17 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDTO updateUser(Long id, UserDTO userDTO) {
+    public UserDTO updateUser(Long id, UserRequestDTO userRequestDTO) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
 
-        user.setUsername(userDTO.getUsername());
-        user.setPassword(userDTO.getPassword());
-        user.setEmail(userDTO.getEmail());
-        user.setRole(userDTO.getRole());
+        user.setUsername(userRequestDTO.getUsername());
+        user.setEmail(userRequestDTO.getEmail());
+        user.setRole(userRequestDTO.getRole());
+
+        if (userRequestDTO.getPassword() != null && !userRequestDTO.getPassword().isBlank()) {
+            user.setPassword(passwordEncoder.encode(userRequestDTO.getPassword()));
+        }
 
         User updated = userRepository.save(user);
         return mapToDTO(updated);
@@ -71,11 +82,12 @@ public class UserServiceImpl implements UserService {
         return dto;
     }
 
-    private User mapToEntity(UserDTO dto) {
+    private User mapToEntity(UserRequestDTO dto) {
         User user = new User();
-        user.setUserId(dto.getUserId());
         user.setUsername(dto.getUsername());
-        user.setPassword(dto.getPassword());
+        if (dto.getPassword() != null && !dto.getPassword().isBlank()) {
+            user.setPassword(passwordEncoder.encode(dto.getPassword()));
+        }
         user.setEmail(dto.getEmail());
         user.setRole(dto.getRole());
         return user;
