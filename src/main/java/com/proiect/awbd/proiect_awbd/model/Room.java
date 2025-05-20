@@ -19,7 +19,7 @@ public class Room {
     @NotNull
     private int capacity;
 
-    @OneToMany(mappedBy = "room", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "room")
     private List<Booking> bookings;
 
     @OneToOne(mappedBy = "room", cascade = CascadeType.ALL)

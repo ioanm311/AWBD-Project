@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>All Feedback</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #eef2f7;
+            padding: 40px;
+        }
+        .container {
+            max-width: 1000px;
+            margin: auto;
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 20px;
+        }
+        a.create-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+        }
+        a.create-link:hover {
+            background-color: #0056b3;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 14px;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #007bff;
+            color: white;
+        }
+        tr:hover {
+            background-color: #f4f8ff;
+        }
+        .actions a {
+            margin-right: 10px;
+            color: #007bff;
+            font-weight: bold;
+        }
+        .actions a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>All Feedback</h1>
+
+    <a class="create-link" th:href="@{/feedback/add}">Add Feedback</a>
+
+    <table>
+        <thead>
+        <tr>
+            <th>Booking ID</th>
+            <th>Comment</th>
+            <th>Rating</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="feedback : ${feedbacks}">
+            <td th:text="${feedback.bookingId}"></td>
+            <td th:text="${feedback.comment}"></td>
+            <td th:text="${feedback.rating}"></td>
+            <td class="actions">
+                <a th:href="@{'/feedback/details/' + ${feedback.bookingId}}">Details</a>
+                <a th:href="@{'/feedback/edit/' + ${feedback.bookingId}}">Edit</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

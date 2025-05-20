@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Edit Room</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 40px auto;
+            padding: 20px;
+            background-color: #f4f4f4;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+        label {
+            margin-top: 15px;
+            font-weight: bold;
+        }
+        input[type="text"],
+        input[type="number"] {
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            margin-top: 5px;
+        }
+        div {
+            color: red;
+            font-size: 0.9em;
+        }
+        button {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        a {
+            display: block;
+            margin-top: 20px;
+            text-align: center;
+            text-decoration: none;
+            color: #333;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+<h1>Edit Room</h1>
+<form th:action="@{/rooms/edit/{id}(id=${room.roomId})}" th:object="${room}" method="post">
+    <label>Name:</label>
+    <input type="text" th:field="*{name}" />
+    <div th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></div>
+
+    <label>Capacity:</label>
+    <input type="number" th:field="*{capacity}" />
+    <div th:if="${#fields.hasErrors('capacity')}" th:errors="*{capacity}"></div>
+
+    <button type="submit">Save</button>
+</form>
+<a th:href="@{/rooms}">← Back to list</a>
+</body>
+</html>

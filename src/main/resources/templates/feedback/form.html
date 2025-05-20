@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Feedback Form</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #eef2f7;
+            padding: 40px;
+        }
+        .form-container {
+            max-width: 600px;
+            margin: auto;
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        }
+        h2 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 25px;
+        }
+        label {
+            font-weight: bold;
+            margin-top: 15px;
+        }
+        input[type="text"], input[type="number"] {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+        }
+        span {
+            color: red;
+            font-size: 0.9em;
+        }
+        button {
+            margin-top: 25px;
+            padding: 10px 20px;
+            width: 100%;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1em;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            text-decoration: none;
+            color: #333;
+        }
+        .error-message {
+            color: red;
+            text-align: center;
+            margin-top: 15px;
+        }
+    </style>
+</head>
+<body>
+<div class="form-container">
+    <h2 th:text="${feedback.bookingId != null} ? 'Edit Feedback' : 'Add Feedback'"></h2>
+
+    <form th:action="@{/feedback/save}" th:object="${feedback}" method="post">
+        <label>Booking ID:</label>
+        <input type="number" th:field="*{bookingId}" required />
+        <span th:if="${#fields.hasErrors('bookingId')}" th:errors="*{bookingId}"></span>
+
+        <label>Comment:</label>
+        <input type="text" th:field="*{comment}" maxlength="255" />
+        <span th:if="${#fields.hasErrors('comment')}" th:errors="*{comment}"></span>
+
+        <label>Rating (1-5):</label>
+        <input type="number" th:field="*{rating}" min="1" max="5" required />
+        <span th:if="${#fields.hasErrors('rating')}" th:errors="*{rating}"></span>
+
+        <input type="hidden" name="isEdit" th:value="${feedback.bookingId != null}" />
+
+        <button type="submit">Save</button>
+    </form>
+
+    <div class="error-message" th:if="${errorMessage}">
+        <p th:text="${errorMessage}"></p>
+    </div>
+
+    <a class="back-link" th:href="@{/feedback}">← Back to list</a>
+</div>
+</body>
+</html>

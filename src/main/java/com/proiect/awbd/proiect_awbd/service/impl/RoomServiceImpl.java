@@ -7,6 +7,8 @@ import com.proiect.awbd.proiect_awbd.model.Room;
 import com.proiect.awbd.proiect_awbd.model.RoomDetails;
 import com.proiect.awbd.proiect_awbd.repository.RoomRepository;
 import com.proiect.awbd.proiect_awbd.service.RoomService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,6 +16,8 @@ import java.util.stream.Collectors;
 
 @Service
 public class RoomServiceImpl implements RoomService {
+
+    private static final Logger logger = LoggerFactory.getLogger(RoomServiceImpl.class);
 
     private final RoomRepository roomRepository;
 
@@ -23,13 +27,16 @@ public class RoomServiceImpl implements RoomService {
 
     @Override
     public RoomDTO saveRoom(RoomDTO dto) {
+        logger.info("Saving room: {}", dto.getName());
         Room room = mapToEntity(dto);
         Room saved = roomRepository.save(room);
+        logger.info("Room saved with id: {}", saved.getRoomId());
         return mapToDTO(saved);
     }
 
     @Override
     public List<RoomDTO> getAllRooms() {
+        logger.info("Fetching all rooms");
         return roomRepository.findAll().stream()
                 .map(this::mapToDTO)
                 .collect(Collectors.toList());
@@ -37,35 +44,62 @@ public class RoomServiceImpl implements RoomService {
 
     @Override
     public RoomDTO getRoomById(Long id) {
+        logger.info("Fetching room by id: {}", id);
         Room room = roomRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Room with id " + id + " not found!"));
+                .orElseThrow(() -> {
+                    logger.warn("Room with id {} not found", id);
+                    return new ResourceNotFoundException("Room with id " + id + " not found!");
+                });
         return mapToDTO(room);
     }
 
     @Override
     public void deleteRoom(Long id) {
-        if (!roomRepository.existsById(id)) {
-            throw new ResourceNotFoundException("Room with id " + id + " not found");
+        logger.info("Deleting room with id: {}", id);
+        Room room = roomRepository.findById(id)
+                .orElseThrow(() -> {
+                    logger.warn("Room with id {} not found", id);
+                    return new ResourceNotFoundException("Room with id " + id + " not found");
+                });
+
+        if (room.getBookings() != null && !room.getBookings().isEmpty()) {
+            logger.error("Room with id {} has existing bookings, cannot delete", id);
+            throw new IllegalStateException("Room cannot be deleted because it has existing bookings.");
         }
-        roomRepository.deleteById(id);
+
+        roomRepository.delete(room);
+        logger.info("Room with id {} deleted successfully", id);
     }
 
     @Override
     public RoomDTO updateRoom(Long id, RoomDTO dto) {
+        logger.info("Updating room with id: {}", id);
         Room room = roomRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Room not found"));
+                .orElseThrow(() -> {
+                    logger.warn("Room with id {} not found for update", id);
+                    return new ResourceNotFoundException("Room not found");
+                });
 
         room.setName(dto.getName());
         room.setCapacity(dto.getCapacity());
 
         if (dto.getRoomDetails() != null) {
-            RoomDetails details = new RoomDetails();
-            details.setDescription(dto.getRoomDetails().getDescription());
-            details.setRoom(room); // bidirectional
-            room.setRoomDetails(details);
+            if (room.getRoomDetails() != null) {
+                room.getRoomDetails().setDescription(dto.getRoomDetails().getDescription());
+                room.getRoomDetails().setEquipmentInfo(dto.getRoomDetails().getEquipmentInfo());
+                logger.info("Updated existing RoomDetails for room id: {}", id);
+            } else {
+                RoomDetails details = new RoomDetails();
+                details.setDescription(dto.getRoomDetails().getDescription());
+                details.setEquipmentInfo(dto.getRoomDetails().getEquipmentInfo());
+                details.setRoom(room); // bidirectional
+                room.setRoomDetails(details);
+                logger.info("Created new RoomDetails for room id: {}", id);
+            }
         }
 
         Room updated = roomRepository.save(room);
+        logger.info("Room with id {} updated successfully", updated.getRoomId());
         return mapToDTO(updated);
     }
 

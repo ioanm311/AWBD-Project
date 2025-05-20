@@ -28,7 +28,7 @@ public class User {
     @NotNull
     private String role; // e.g. "ROLE_USER", "ROLE_ADMIN"
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user")
     private List<Booking> bookings;
 
     public Long getUserId() {

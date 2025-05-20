@@ -1,16 +1,35 @@
 package com.proiect.awbd.proiect_awbd.dto;
 
+import jakarta.validation.constraints.FutureOrPresent;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 
 public class BookingRequestDTO {
+    private Long bookingId;
+    @NotNull(message = "Date is required")
+    @FutureOrPresent(message = "Date must be today or in the future")
     private LocalDate date;
+
+    @NotNull(message = "Start time is required")
     private LocalTime startTime;
+
+    @NotNull(message = "End time is required")
     private LocalTime endTime;
+
+    @NotNull(message = "User ID is required")
     private Long userId;
+
+    @NotNull(message = "Room ID is required")
     private Long roomId;
+
+    @NotNull(message = "Event type ID is required")
     private Long eventTypeId;
+
+    @Size(min = 0, message = "Equipment IDs list cannot be null")
     private List<Long> equipmentIds;
 
     public LocalDate getDate() {
@@ -67,6 +86,14 @@ public class BookingRequestDTO {
 
     public void setEquipmentIds(List<Long> equipmentIds) {
         this.equipmentIds = equipmentIds;
+    }
+
+    public Long getBookingId() {
+        return bookingId;
+    }
+
+    public void setBookingId(Long bookingId) {
+        this.bookingId = bookingId;
     }
 }
 

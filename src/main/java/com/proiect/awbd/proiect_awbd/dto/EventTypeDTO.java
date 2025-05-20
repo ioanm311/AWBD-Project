@@ -1,7 +1,13 @@
 package com.proiect.awbd.proiect_awbd.dto;
 
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+
 public class EventTypeDTO {
     private Long eventTypeId;
+
+    @NotNull(message = "Event type name cannot be null")
+    @Size(min = 3, max = 50, message = "Name must be between 3 and 50 characters")
     private String name;
 
     public Long getEventTypeId() {

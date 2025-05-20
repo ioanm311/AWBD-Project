@@ -14,6 +14,42 @@ public class BookingResponseDTO {
     private String eventTypeName;
     private List<String> equipmentNames;
     private FeedbackDTO feedback;
+    private Long userId;
+    private Long roomId;
+    private Long eventTypeId;
+    private List<Long> equipmentIds;
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
+
+    public Long getRoomId() {
+        return roomId;
+    }
+
+    public void setRoomId(Long roomId) {
+        this.roomId = roomId;
+    }
+
+    public List<Long> getEquipmentIds() {
+        return equipmentIds;
+    }
+
+    public void setEquipmentIds(List<Long> equipmentIds) {
+        this.equipmentIds = equipmentIds;
+    }
+
+    public Long getEventTypeId() {
+        return eventTypeId;
+    }
+
+    public void setEventTypeId(Long eventTypeId) {
+        this.eventTypeId = eventTypeId;
+    }
 
     public Long getBookingId() {
         return bookingId;

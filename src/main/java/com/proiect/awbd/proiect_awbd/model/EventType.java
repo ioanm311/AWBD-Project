@@ -16,7 +16,7 @@ public class EventType {
     @Size(min = 3, max = 50)
     private String name;
 
-    @OneToMany(mappedBy = "eventType", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "eventType")
     private List<Booking> bookings;
 
     public Long getEventTypeId() {

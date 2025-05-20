@@ -6,6 +6,8 @@ import com.proiect.awbd.proiect_awbd.exception.ResourceNotFoundException;
 import com.proiect.awbd.proiect_awbd.model.User;
 import com.proiect.awbd.proiect_awbd.repository.UserRepository;
 import com.proiect.awbd.proiect_awbd.service.UserService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +17,7 @@ import java.util.stream.Collectors;
 @Service
 public class UserServiceImpl implements UserService {
 
+    private static final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
@@ -25,17 +28,21 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDTO saveUser(UserRequestDTO userRequestDTO) {
+        logger.info("Saving new user: {}", userRequestDTO.getUsername());
         if (userRequestDTO.getPassword() == null || userRequestDTO.getPassword().isBlank()) {
+            logger.warn("Attempt to save user with empty password");
             throw new IllegalArgumentException("Password must not be empty");
         }
         User user = mapToEntity(userRequestDTO);
         user.setPassword(passwordEncoder.encode(userRequestDTO.getPassword()));
         User saved = userRepository.save(user);
+        logger.info("User saved with id: {}", saved.getUserId());
         return mapToDTO(saved);
     }
 
     @Override
     public List<UserDTO> getAllUsers() {
+        logger.info("Fetching all users");
         return userRepository.findAll().stream()
                 .map(this::mapToDTO)
                 .collect(Collectors.toList());
@@ -43,33 +50,53 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDTO getUserById(Long id) {
+        logger.info("Fetching user with id: {}", id);
         User user = userRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("User with id " + id + " not found"));
+                .orElseThrow(() -> {
+                    logger.warn("User with id {} not found", id);
+                    return new ResourceNotFoundException("User with id " + id + " not found");
+                });
         return mapToDTO(user);
     }
 
     @Override
     public void deleteUser(Long id) {
-        if (!userRepository.existsById(id)) {
-            throw new ResourceNotFoundException("User with id " + id + " not found");
+        logger.info("Deleting user with id: {}", id);
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> {
+                    logger.warn("User with id {} not found for deletion", id);
+                    return new ResourceNotFoundException("User with id " + id + " not found");
+                });
+
+        if (!user.getBookings().isEmpty()) {
+            logger.warn("Attempt to delete user with active bookings, id: {}", id);
+            throw new IllegalStateException("Cannot delete user with active bookings");
         }
-        userRepository.deleteById(id);
+
+        userRepository.delete(user);
+        logger.info("User deleted successfully: {}", id);
     }
 
     @Override
     public UserDTO updateUser(Long id, UserRequestDTO userRequestDTO) {
+        logger.info("Updating user with id: {}", id);
         User user = userRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+                .orElseThrow(() -> {
+                    logger.warn("User with id {} not found for update", id);
+                    return new ResourceNotFoundException("User not found");
+                });
 
         user.setUsername(userRequestDTO.getUsername());
         user.setEmail(userRequestDTO.getEmail());
         user.setRole(userRequestDTO.getRole());
 
         if (userRequestDTO.getPassword() != null && !userRequestDTO.getPassword().isBlank()) {
+            logger.info("Updating password for user id: {}", id);
             user.setPassword(passwordEncoder.encode(userRequestDTO.getPassword()));
         }
 
         User updated = userRepository.save(user);
+        logger.info("User updated successfully with id: {}", updated.getUserId());
         return mapToDTO(updated);
     }
 

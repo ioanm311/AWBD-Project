@@ -20,6 +20,17 @@ public class RoomDetails {
     @JoinColumn(name = "room_id")
     private Room room;
 
+    @Version
+    private Long version;
+
+    public Long getVersion() {
+        return version;
+    }
+
+    public void setVersion(Long version) {
+        this.version = version;
+    }
+
     public Long getRoomId() {
         return roomId;
     }
