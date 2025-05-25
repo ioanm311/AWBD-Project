@@ -9,6 +9,8 @@ import com.proiect.awbd.proiect_awbd.repository.RoomRepository;
 import com.proiect.awbd.proiect_awbd.service.RoomService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -40,6 +42,13 @@ public class RoomServiceImpl implements RoomService {
         return roomRepository.findAll().stream()
                 .map(this::mapToDTO)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public Page<RoomDTO> getAllRoomsPaginated(Pageable pageable) {
+        logger.info("Fetching paginated list of rooms");
+        return roomRepository.findAll(pageable)
+                .map(this::mapToDTO);
     }
 
     @Override

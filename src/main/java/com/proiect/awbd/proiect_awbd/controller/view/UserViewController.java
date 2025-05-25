@@ -1,14 +1,20 @@
 package com.proiect.awbd.proiect_awbd.controller.view;
 
+import com.proiect.awbd.proiect_awbd.dto.UserDTO;
 import com.proiect.awbd.proiect_awbd.dto.UserRequestDTO;
 import com.proiect.awbd.proiect_awbd.service.UserService;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequestMapping("/users")
@@ -22,9 +28,25 @@ public class UserViewController {
     }
 
     @GetMapping
-    public String listUsers(Model model) {
-        logger.info("Displaying all users in view");
-        model.addAttribute("users", userService.getAllUsers());
+    public String listUsers(@RequestParam(defaultValue = "0") int page,
+                            @RequestParam(defaultValue = "5") int size,
+                            @RequestParam(defaultValue = "username") String sortBy,
+                            @RequestParam(defaultValue = "asc") String direction,
+                            Model model) {
+
+        logger.info("Displaying users in view with pagination and sorting: page={}, size={}, sortBy={}, direction={}", page, size, sortBy, direction);
+
+        Sort sort = direction.equalsIgnoreCase("asc") ? Sort.by(sortBy).ascending() : Sort.by(sortBy).descending();
+        Pageable pageable = PageRequest.of(page, size, sort);
+        Page<UserDTO> userPage = userService.getAllUsersPaginated(pageable);
+
+        model.addAttribute("userPage", userPage);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", userPage.getTotalPages());
+        model.addAttribute("sortBy", sortBy);
+        model.addAttribute("direction", direction);
+        model.addAttribute("size", size);
+
         return "users/list";
     }
 
@@ -75,7 +97,7 @@ public class UserViewController {
     }
 
     @PostMapping("/delete/{id}")
-    public String deleteUser(@PathVariable Long id, Model model) {
+    public String deleteUser(@PathVariable Long id, RedirectAttributes redirectAttributes) {
         logger.info("Attempting to delete user via view with id: {}", id);
         try {
             userService.deleteUser(id);
@@ -83,9 +105,8 @@ public class UserViewController {
         } catch (Exception ex) {
             String errorMessage = "Cannot delete user with active bookings";
             logger.error("Error deleting user with id {}: {}", id, ex.getMessage());
-            model.addAttribute("users", userService.getAllUsers());
-            model.addAttribute("errorMessage", errorMessage);
-            return "users/list";
+            redirectAttributes.addFlashAttribute("errorMessage", errorMessage);
+            return "redirect:/users";
         }
     }
 }

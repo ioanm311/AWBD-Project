@@ -93,19 +93,42 @@
 <table>
     <thead>
     <tr>
-        <th>ID</th>
-        <th>Description</th>
-        <th>Equipment Info</th>
+        <th>
+            <a th:href="@{/room-details(sortBy='roomId', direction=${sortBy == 'roomId' and direction == 'asc' ? 'desc' : 'asc'}, page=0, size=${size})}">
+                ID
+                <span th:if="${sortBy == 'roomId'}" th:text="${direction == 'asc' ? '↑' : '↓'}"></span>
+            </a>
+        </th>
+        <th>
+            <a th:href="@{/room-details(sortBy='description', direction=${sortBy == 'description' and direction == 'asc' ? 'desc' : 'asc'}, page=0, size=${size})}">
+                Description
+                <span th:if="${sortBy == 'description'}" th:text="${direction == 'asc' ? '↑' : '↓'}"></span>
+            </a>
+        </th>
+        <th>
+            <a th:href="@{/room-details(sortBy='equipmentInfo', direction=${sortBy == 'equipmentInfo' and direction == 'asc' ? 'desc' : 'asc'}, page=0, size=${size})}">
+                Equipment Info
+                <span th:if="${sortBy == 'equipmentInfo'}" th:text="${direction == 'asc' ? '↑' : '↓'}"></span>
+            </a>
+        </th>
     </tr>
     </thead>
     <tbody>
-    <tr th:each="detail : ${roomDetailsList}">
+    <tr th:each="detail : ${roomDetailsPage.content}">
         <td data-label="ID" th:text="${detail.roomId}"></td>
         <td data-label="Description" th:text="${detail.description}"></td>
         <td data-label="Equipment Info" th:text="${detail.equipmentInfo}"></td>
     </tr>
     </tbody>
 </table>
+<div class="pagination">
+    <a th:if="${currentPage > 0}"
+       th:href="@{/room-details(page=${currentPage - 1}, size=${size}, sortBy=${sortBy}, direction=${direction})}">Previous</a>
 
+    <span th:text="'Page ' + (${currentPage + 1}) + ' of ' + ${totalPages}"></span>
+
+    <a th:if="${currentPage < totalPages - 1}"
+       th:href="@{/room-details(page=${currentPage + 1}, size=${size}, sortBy=${sortBy}, direction=${direction})}">Next</a>
+</div>
 </body>
 </html>

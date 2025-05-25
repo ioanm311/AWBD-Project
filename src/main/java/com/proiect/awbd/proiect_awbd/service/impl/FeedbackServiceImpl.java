@@ -9,6 +9,8 @@ import com.proiect.awbd.proiect_awbd.repository.FeedbackRepository;
 import com.proiect.awbd.proiect_awbd.service.FeedbackService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -57,6 +59,12 @@ public class FeedbackServiceImpl implements FeedbackService {
         return feedbackRepository.findAll().stream()
                 .map(this::toDTO)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public Page<FeedbackDTO> getAllFeedbacksPaginated(Pageable pageable) {
+        logger.info("Fetching feedbacks paginated and sorted");
+        return feedbackRepository.findAll(pageable).map(this::toDTO);
     }
 
     @Override

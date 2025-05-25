@@ -8,6 +8,8 @@ import com.proiect.awbd.proiect_awbd.repository.UserRepository;
 import com.proiect.awbd.proiect_awbd.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -46,6 +48,13 @@ public class UserServiceImpl implements UserService {
         return userRepository.findAll().stream()
                 .map(this::mapToDTO)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public Page<UserDTO> getAllUsersPaginated(Pageable pageable) {
+        logger.info("Fetching users with pagination - page: {}, size: {}", pageable.getPageNumber(), pageable.getPageSize());
+        return userRepository.findAll(pageable)
+                .map(this::mapToDTO);
     }
 
     @Override
