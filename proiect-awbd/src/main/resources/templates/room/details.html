@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Room Details</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 40px auto;
+            padding: 20px;
+            background-color: #f4f4f4;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        p {
+            margin: 12px 0;
+            font-size: 1rem;
+        }
+        strong {
+            font-weight: bold;
+        }
+        a {
+            display: block;
+            margin-top: 20px;
+            text-align: center;
+            text-decoration: none;
+            color: #333;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+<h1>Room Details</h1>
+
+<p><strong>ID:</strong> <span th:text="${room.roomId}"></span></p>
+<p><strong>Name:</strong> <span th:text="${room.name}"></span></p>
+<p><strong>Capacity:</strong> <span th:text="${room.capacity}"></span></p>
+
+<div th:if="${room.roomDetails != null}">
+    <p><strong>Description:</strong> <span th:text="${room.roomDetails.description}"></span></p>
+    <p><strong>Equipment Info:</strong> <span th:text="${room.roomDetails.equipmentInfo}"></span></p>
+</div>
+
+<a th:href="@{/rooms}">← Back</a>
+</body>
+</html>

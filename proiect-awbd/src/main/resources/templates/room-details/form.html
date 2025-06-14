@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Add Room Detail</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 40px auto;
+            padding: 20px;
+            background-color: #f4f4f4;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+        label {
+            margin-top: 15px;
+            font-weight: bold;
+        }
+        input[type="text"],
+        input[type="number"] {
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            margin-top: 5px;
+        }
+        span {
+            color: red;
+            font-size: 0.9em;
+        }
+        button {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .back-link {
+            display: block;
+            margin-top: 20px;
+            text-align: center;
+            text-decoration: none;
+            color: #333;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .error-message {
+            color: red;
+            margin-top: 15px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+<h1>Add Room Detail</h1>
+
+<form th:action="@{/room-details/save}" th:object="${roomDetails}" method="post">
+    <label th:for="*{roomId}">Room ID:</label>
+    <input type="number" th:field="*{roomId}" required />
+    <span th:if="${#fields.hasErrors('roomId')}" th:errors="*{roomId}"></span>
+
+    <label th:for="*{description}">Description:</label>
+    <input type="text" th:field="*{description}" required minlength="5" />
+    <span th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></span>
+
+    <label th:for="*{equipmentInfo}">Equipment Info:</label>
+    <input type="text" th:field="*{equipmentInfo}" />
+
+    <div class="error-message" th:if="${errorMessage}">
+        <p th:text="${errorMessage}"></p>
+    </div>
+
+    <button type="submit">Save</button>
+</form>
+
+<a class="back-link" th:href="@{/room-details}">← Back to list</a>
+</body>
+</html>

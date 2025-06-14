@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Feedback Details</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #eef2f7;
+            padding: 40px;
+        }
+        .details-container {
+            max-width: 600px;
+            margin: auto;
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+        }
+        p {
+            font-size: 1.1em;
+            margin: 15px 0;
+        }
+        strong {
+            color: #555;
+        }
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 30px;
+            color: #007bff;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+<div class="details-container">
+    <h1>Feedback Details</h1>
+
+    <p><strong>Booking ID:</strong> <span th:text="${feedback.bookingId}"></span></p>
+    <p><strong>Comment:</strong> <span th:text="${feedback.comment}"></span></p>
+    <p><strong>Rating:</strong> <span th:text="${feedback.rating}"></span></p>
+
+    <a class="back-link" th:href="@{/feedback}">← Back to list</a>
+</div>
+</body>
+</html>
